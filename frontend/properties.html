@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aurox | Properties</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white">
+  <header>
+    <nav class="bg-amber-500/95 backdrop-blur w-full min-h-16 flex items-center justify-between px-4 py-3 fixed top-0 left-0 z-20">
+      <ul class="flex flex-wrap items-center gap-3 sm:gap-4 text-sm sm:text-base">
+        <li><h1 class="font-bold tracking-wide">AUROX</h1></li>
+        <li><a href="index.html" class="text-gray-700 hover:text-gray-900">Home</a></li>
+        <li><a href="properties.html" class="text-gray-700 hover:text-gray-900">Properties</a></li>
+        <li><a href="about.html" class="text-gray-700 hover:text-gray-900">About</a></li>
+        <li><a href="services.html" class="text-gray-700 hover:text-gray-900">Services</a></li>
+        <li><a href="contact.html" class="text-gray-700 hover:text-gray-900">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="pt-20">
+    <section class="relative min-h-[70svh] flex items-center overflow-hidden">
+      <img src="images/heroImage.png" alt="Properties hero background" class="absolute inset-0 h-full w-full object-cover">
+      <div class="absolute inset-0 bg-black/65"></div>
+
+      <div class="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div class="max-w-3xl text-center sm:text-left">
+          <p class="text-amber-400 font-semibold tracking-[0.2em] uppercase text-xs sm:text-sm">Browse Properties</p>
+          <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">Discover Homes, Apartments, and Estates That Fit Your Needs</h2>
+          <p class="mt-4 text-sm sm:text-base lg:text-lg text-gray-200 max-w-2xl mx-auto sm:mx-0">
+            Explore verified listings, compare options, and filter by location, type, and budget. Final search logic will be connected in Django later.
+          </p>
+        </div>
+
+        <section class="mt-8 sm:mt-10 bg-black/45 backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-5 lg:p-6">
+          <form class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 items-end" action="#" method="get">
+            <div>
+              <label for="property-search" class="block text-white text-sm mb-1">Search</label>
+              <input
+                id="property-search"
+                name="q"
+                type="text"
+                placeholder="Search by keyword or location"
+                class="w-full bg-gray-900/80 text-white border border-gray-500 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder:text-gray-500"
+              >
+            </div>
+
+            <div>
+              <label for="property-type" class="block text-white text-sm mb-1">Type</label>
+              <select id="property-type" name="type" class="w-full bg-gray-900/80 text-white border border-gray-500 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="">Select Type</option>
+                <option value="house">House</option>
+                <option value="apartment">Apartment</option>
+                <option value="commercial">Estate</option>
+                <option value="hotel">Hotel</option>
+                <option value="hostel">Hostel</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="price-range" class="block text-white text-sm mb-1">Price Range</label>
+              <select id="price-range" name="price" class="w-full bg-gray-900/80 text-white border border-gray-500 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="">Select Price Range</option>
+                <option value="0-1000">$0 - $1,000</option>
+                <option value="1000-2000">$1,000 - $2,000</option>
+                <option value="2000-3000">$2,000 - $3,000</option>
+                <option value="3000-4000">$3,000 - $4,000</option>
+                <option value="4000+">$4,000+</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="area" class="block text-white text-sm mb-1">Area</label>
+              <select id="area" name="area" class="w-full bg-gray-900/80 text-white border border-gray-500 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="">Select Area</option>
+                <option value="cape-coast">Cape Coast</option>
+                <option value="accra">Accra</option>
+                <option value="kumasi">Kumasi</option>
+                <option value="takoradi">Takoradi</option>
+                <option value="tamale">Tamale</option>
+              </select>
+            </div>
+
+            <div class="sm:col-span-2 lg:col-span-4 flex flex-col sm:flex-row gap-3">
+              <button type="submit" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 px-5 rounded-lg transition">
+                Search Properties
+              </button>
+              <button type="reset" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-2.5 px-5 rounded-lg transition">
+                Clear Filters
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div class="flex items-end justify-between gap-4 mb-6 sm:mb-8">
+        <div>
+          <p class="text-amber-400 uppercase tracking-[0.2em] text-xs sm:text-sm font-semibold">Listings</p>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white mt-2">Available Properties</h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+        <div class="bg-gradient-to-b from-gray-900 to-gray-800 rounded-2xl overflow-hidden border border-white/10 shadow-xl hover:-translate-y-1 transition duration-300">
+          <img src="images/house10.jpg" alt="Modern Apartment in Accra" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <span class="bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded">For Sale</span>
+            <h3 class="text-xl font-bold text-white mt-3 mb-2">Modern Apartment in Accra</h3>
+            <p class="text-gray-400 mb-4">2 Beds, 2 Baths, 1200 sqft</p>
+            <div class="mb-4"><span class="text-amber-300 font-semibold">1299 GHS</span></div>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <a href="propertydetail.html" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg transition text-center">View Details</a>
+              <a href="virtualtour.html" class="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold py-2 px-4 rounded-lg transition text-center">Virtual Tour</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-b from-gray-900 to-gray-800 rounded-2xl overflow-hidden border border-white/10 shadow-xl hover:-translate-y-1 transition duration-300">
+          <img src="images/house2.jpg" alt="Spacious House in Cape Coast" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <span class="bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded">For Sale</span>
+            <h3 class="text-xl font-bold text-white mt-3 mb-2">Spacious House in Cape Coast</h3>
+            <p class="text-gray-400 mb-4">4 Beds, 3 Baths, 2500 sqft</p>
+            <div class="mb-4"><span class="text-amber-300 font-semibold">1299 GHS</span></div>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <a href="propertydetail.html" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg transition text-center">View Details</a>
+              <a href="virtualtour.html" class="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold py-2 px-4 rounded-lg transition text-center">Virtual Tour</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-b from-gray-900 to-gray-800 rounded-2xl overflow-hidden border border-white/10 shadow-xl hover:-translate-y-1 transition duration-300">
+          <img src="images/house3.jpg" alt="Commercial Space in Kumasi" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <span class="bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded">For Rent</span>
+            <h3 class="text-xl font-bold text-white mt-3 mb-2">Commercial Space in Kumasi</h3>
+            <p class="text-gray-400 mb-4">1500 sqft, Prime Location</p>
+            <div class="mb-4"><span class="text-amber-300 font-semibold">1299 GHS</span></div>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <a href="propertydetail.html" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg transition text-center">View Details</a>
+              <a href="virtualtour.html" class="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold py-2 px-4 rounded-lg transition text-center">Virtual Tour</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10 bg-gradient-to-b from-gray-950 to-black text-gray-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-white text-xl font-bold">AUROX</h3>
+          <p class="mt-3 text-sm leading-6 text-gray-400">
+            Trusted real estate listings and virtual tours to help you discover the right property with confidence.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-white font-semibold">Company</h4>
+          <ul class="mt-3 space-y-2 text-sm">
+            <li><a href="about.html" class="hover:text-amber-400 transition">About Us</a></li>
+            <li><a href="services.html" class="hover:text-amber-400 transition">Services</a></li>
+            <li><a href="properties.html" class="hover:text-amber-400 transition">Properties</a></li>
+            <li><a href="contact.html" class="hover:text-amber-400 transition">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-semibold">Support</h4>
+          <ul class="mt-3 space-y-2 text-sm">
+            <li><a href="#" class="hover:text-amber-400 transition">Help Center</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-amber-400 transition">FAQs</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-semibold">Get Updates</h4>
+          <p class="mt-3 text-sm text-gray-400">Receive new listings and market updates.</p>
+          <form class="mt-4 flex gap-2">
+            <input
+              type="email"
+              placeholder="Your email"
+              class="w-full bg-gray-900/80 border border-white/20 text-white placeholder:text-gray-500 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500"
+            >
+            <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-4 rounded-lg transition">
+              Join
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-gray-500">
+        <p>&copy; 2026 Aurox. All rights reserved.</p>
+        <p>Designed for modern property discovery.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
