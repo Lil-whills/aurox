@@ -3,6 +3,11 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('bookmarks/', views.bookmarks, name='bookmarks'),
+    path('bookmarks/save/<int:property_id>/', views.save_bookmark, name='save_bookmark'),
+    path('logout/', views.logout_view, name='logout'),
+    path('login/', views.login_view, name='login'),
+    path('signup/', views.signup_view, name='signup'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
     path('services/', views.services, name='services'),
