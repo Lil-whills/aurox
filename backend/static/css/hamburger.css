@@ -1,0 +1,44 @@
+/* Hamburger Menu Styles */
+
+#mobileMenu {
+  display: none;
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+}
+
+#mobileMenu.mobile-menu-visible {
+  display: block;
+  opacity: 1;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+#menuOverlay {
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#menuOverlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#hamburgerBtn {
+  transition: all 0.3s ease;
+}
+
+#hamburgerBtn.active svg {
+  transform: rotate(90deg);
+}
+
+/* Smooth animations for menu items */
+#mobileMenu a,
+#mobileMenu button {
+  transition: all 0.2s ease;
+}
+
+#mobileMenu a:active,
+#mobileMenu button:active {
+  background-color: rgba(217, 119, 6, 0.1);
+}
