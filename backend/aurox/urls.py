@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('dashboard/', views.dashboard, name='dashboard'),
     path('', views.index, name='index'),
     path('bookmarks/', views.bookmarks, name='bookmarks'),
     path('bookmarks/save/<int:property_id>/', views.save_bookmark, name='save_bookmark'),

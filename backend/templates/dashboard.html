@@ -1,0 +1,370 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>havemont | Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-white text-gray-900 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-gray-950/95 text-gray-100 border-b border-gray-800 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div class="flex items-center justify-center md:justify-start gap-3">
+        <a href="{% url 'index' %}" class="text-2xl font-bold tracking-wide">havemont</a>
+        <a href="{% url 'dashboard' %}" class="md:hidden px-3 py-1 rounded-full bg-amber-600 text-black text-xs font-semibold border border-amber-500">Dashboard</a>
+      </div>
+
+      <nav class="w-full md:w-auto">
+        <ul class="flex flex-wrap items-center justify-center md:justify-end gap-2 md:gap-3 text-xs sm:text-sm md:text-base">
+          <li>
+            <a href="{% url 'index' %}" class="px-3 py-2 rounded-md hover:bg-gray-800 transition">
+              Home
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'properties' %}" class="px-3 py-2 rounded-md hover:bg-gray-800 transition">
+              Properties
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'dashboard' %}" class="hidden md:inline-flex px-3 py-2 rounded-md bg-amber-600 text-black hover:bg-amber-500 transition">
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'bookmarks' %}" class="px-3 py-2 rounded-md border border-gray-700 hover:bg-gray-800 transition">
+              Bookmarks
+            </a>
+          </li>
+          {% if user.is_authenticated %}
+          <li>
+            <a href="{% url 'logout' %}" class="px-3 py-2 rounded-md border border-gray-700 hover:bg-gray-800 transition">
+              Logout
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="flex-1 py-8 md:py-10 px-4">
+    <section class="max-w-7xl mx-auto">
+
+      <!-- Page heading -->
+      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8 text-center">
+        <div class="w-full">
+          <p class="text-sm font-semibold uppercase tracking-wider text-blue-600 mb-2">
+            Property Management
+          </p>
+          <h1 class="text-2xl md:text-4xl font-bold mb-2 text-gray-900">
+            Manage Your Properties
+          </h1>
+          <p class="text-gray-600 text-sm md:text-base">
+            View, edit, and manage all your properties. Track status, pricing, and featured listings.
+          </p>
+        </div>
+
+        {% if is_admin %}
+        <div class="flex flex-wrap justify-center md:justify-end gap-3">
+          <a
+            href="/admin/aurox/properties/add/"
+            class="inline-flex items-center justify-center bg-amber-600 text-black px-5 py-3 rounded-md hover:bg-amber-500 transition font-medium"
+          >
+            + Post Property
+          </a>
+          <a href="/admin/" class="inline-flex items-center justify-center bg-amber-600/10 text-amber-600 px-4 py-2 rounded-md hover:bg-amber-500/10 transition font-medium border border-amber-600">
+            Admin Panel
+          </a>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Summary cards -->
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8 text-center">
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+          <p class="text-sm text-gray-600 mb-2">Total Properties</p>
+          <h2 class="text-3xl font-bold text-gray-900">{{ total_properties }}</h2>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+          <p class="text-sm text-gray-600 mb-2">Available</p>
+          <h2 class="text-3xl font-bold text-emerald-600">{{ available_count }}</h2>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+          <p class="text-sm text-gray-600 mb-2">Sold</p>
+          <h2 class="text-3xl font-bold text-red-600">{{ sold_count }}</h2>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+          <p class="text-sm text-gray-600 mb-2">Featured</p>
+          <h2 class="text-3xl font-bold text-yellow-600">{{ featured_count }}</h2>
+        </div>
+      </div>
+
+      <!-- Search and filter row -->
+      <div class="bg-white border border-gray-200 rounded-xl p-4 md:p-5 shadow-sm mb-6">
+        <form method="get" action="{% url 'dashboard' %}" class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div class="flex flex-col gap-3 md:flex-row md:items-center w-full">
+            <input
+              name="q"
+                value="{{ filters.q }}"
+              type="text"
+              placeholder="Search properties by name, location..."
+              class="w-full md:max-w-md border border-gray-300 rounded-md px-4 py-3 text-gray-900 outline-none focus:border-blue-500"
+            />
+
+            <select
+              name="type"
+              class="border border-gray-300 rounded-md px-4 py-3 bg-white text-gray-900 outline-none focus:border-amber-500"
+            >
+              <option value="">All Types</option>
+              <option value="house" {% if filters.type == 'house' %}selected{% endif %}>House</option>
+              <option value="apartment" {% if filters.type == 'apartment' %}selected{% endif %}>Apartment</option>
+              <option value="condo" {% if filters.type == 'condo' %}selected{% endif %}>Condo</option>
+              <option value="hotel" {% if filters.type == 'hotel' %}selected{% endif %}>Hotel</option>
+              <option value="estate" {% if filters.type == 'estate' %}selected{% endif %}>Estate</option>
+              <option value="villa" {% if filters.type == 'villa' %}selected{% endif %}>Villa</option>
+              <option value="cottage" {% if filters.type == 'cottage' %}selected{% endif %}>Cottage</option>
+              <option value="penthouse" {% if filters.type == 'penthouse' %}selected{% endif %}>Penthouse</option>
+            </select>
+
+            <select
+              name="category"
+              class="border border-gray-300 rounded-md px-4 py-3 bg-white text-gray-900 outline-none focus:border-amber-500"
+            >
+              <option value="">All Categories</option>
+              <option value="for_sale" {% if filters.category == 'for_sale' %}selected{% endif %}>For Sale</option>
+              <option value="for_rent" {% if filters.category == 'for_rent' %}selected{% endif %}>For Rent</option>
+            </select>
+
+            <select
+              name="status"
+              class="border border-gray-300 rounded-md px-4 py-3 bg-white text-gray-900 outline-none focus:border-amber-500"
+            >
+              <option value="">All Status</option>
+              <option value="available" {% if filters.status == 'available' %}selected{% endif %}>Available</option>
+              <option value="sold" {% if filters.status == 'sold' %}selected{% endif %}>Sold</option>
+              <option value="not_available" {% if filters.status == 'not_available' %}selected{% endif %}>Not Available</option>
+            </select>
+
+            <select
+              name="sort"
+              class="border border-gray-300 rounded-md px-4 py-3 bg-white text-gray-900 outline-none focus:border-amber-500"
+            >
+              <option value="newest" {% if filters.sort == 'newest' %}selected{% endif %}>Newest</option>
+              <option value="oldest" {% if filters.sort == 'oldest' %}selected{% endif %}>Oldest</option>
+              <option value="price_low" {% if filters.sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+              <option value="price_high" {% if filters.sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+              <option value="rating_high" {% if filters.sort == 'rating_high' %}selected{% endif %}>Rating: High to Low</option>
+              <option value="rating_low" {% if filters.sort == 'rating_low' %}selected{% endif %}>Rating: Low to High</option>
+            </select>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button type="submit" class="bg-gray-900 text-white px-5 py-3 rounded-md hover:bg-gray-800 transition">
+              Search
+            </button>
+            <a href="{% url 'dashboard' %}" class="text-sm text-amber-600 hover:underline">Reset</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Desktop table -->
+      <div class="hidden lg:block bg-white border rounded-xl shadow-sm overflow-hidden mb-8">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-100 text-center text-gray-700">
+              <tr>
+                <th class="px-6 py-4 font-semibold">Name</th>
+                <th class="px-6 py-4 font-semibold">Type</th>
+                <th class="px-6 py-4 font-semibold">Location</th>
+                <th class="px-6 py-4 font-semibold">Price</th>
+                <th class="px-6 py-4 font-semibold">Category</th>
+                <th class="px-6 py-4 font-semibold">Status</th>
+                <th class="px-6 py-4 font-semibold">Featured</th>
+                <th class="px-6 py-4 font-semibold text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+
+              {% for property in properties %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 font-medium text-center">{{ property.name }}</td>
+                <td class="px-6 py-4 text-center">{{ property.type|title }}</td>
+                <td class="px-6 py-4 text-center">{{ property.location }}</td>
+                <td class="px-6 py-4 text-center">
+                  <span class="font-semibold text-emerald-600">${{ property.price|floatformat:0 }}</span>
+                  {% if property.old_price %}
+                    <div class="text-xs text-gray-400 line-through">${{ property.old_price|floatformat:0 }}</div>
+                  {% endif %}
+                </td>
+                <td class="px-6 py-4 text-center">
+                  {% if property.category == 'for_sale' %}
+                    <span class="text-xs font-semibold bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                      For Sale
+                    </span>
+                  {% else %}
+                    <span class="text-xs font-semibold bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                      For Rent
+                    </span>
+                  {% endif %}
+                </td>
+                <td class="px-6 py-4 text-center">
+                  {% if property.status == 'available' %}
+                    <span class="text-xs font-semibold bg-green-100 text-green-700 px-2 py-1 rounded">
+                      Available
+                    </span>
+                  {% elif property.status == 'sold' %}
+                    <span class="text-xs font-semibold bg-red-100 text-red-700 px-2 py-1 rounded">
+                      Sold
+                    </span>
+                  {% else %}
+                    <span class="text-xs font-semibold bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                      Not Available
+                    </span>
+                  {% endif %}
+                </td>
+                <td class="px-6 py-4 text-center">
+                  {% if property.is_featured %}
+                    <span class="text-xs font-semibold bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                      ⭐ Featured
+                    </span>
+                  {% else %}
+                    <span class="text-xs text-gray-400">—</span>
+                  {% endif %}
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="/admin/aurox/properties/{{ property.id }}/change/" class="px-3 py-2 rounded-md bg-amber-100 text-amber-800 hover:bg-amber-200 transition">
+                      Edit
+                    </a>
+                    <a href="{% url 'propertydetail' property.id %}" class="px-3 py-2 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
+                      View
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Mobile / tablet cards -->
+      <div class="grid gap-4 lg:hidden">
+        {% for property in properties %}
+        <article class="bg-white border rounded-xl shadow-sm p-5 text-center">
+          <div class="flex flex-col items-center gap-2 mb-4">
+            <h2 class="text-lg font-semibold">{{ property.name }}</h2>
+            <div class="flex gap-2 flex-wrap justify-center">
+              {% if property.is_featured %}
+                <span class="text-xs font-semibold bg-yellow-100 text-yellow-800 px-2 py-1 rounded whitespace-nowrap">
+                  ⭐ Featured
+                </span>
+              {% endif %}
+              {% if property.category == 'for_sale' %}
+                <span class="text-xs font-semibold bg-blue-100 text-blue-800 px-2 py-1 rounded whitespace-nowrap">
+                  For Sale
+                </span>
+              {% else %}
+                <span class="text-xs font-semibold bg-purple-100 text-purple-800 px-2 py-1 rounded whitespace-nowrap">
+                  For Rent
+                </span>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-sm mb-5">
+            <div class="rounded-lg border border-gray-200 bg-gray-50 p-2">
+              <p class="text-[11px] uppercase tracking-wide text-gray-500">Type</p>
+              <p class="font-semibold text-gray-800">{{ property.type|title }}</p>
+            </div>
+            <div class="rounded-lg border border-gray-200 bg-gray-50 p-2">
+              <p class="text-[11px] uppercase tracking-wide text-gray-500">Status</p>
+              <p class="font-semibold text-gray-800">
+                {% if property.status == 'available' %}Available{% elif property.status == 'sold' %}Sold{% else %}Not Available{% endif %}
+              </p>
+            </div>
+            <div class="rounded-lg border border-gray-200 bg-gray-50 p-2">
+              <p class="text-[11px] uppercase tracking-wide text-gray-500">Location</p>
+              <p class="font-semibold text-gray-800">{{ property.location }}</p>
+            </div>
+            <div class="rounded-lg border border-gray-200 bg-gray-50 p-2">
+              <p class="text-[11px] uppercase tracking-wide text-gray-500">Price</p>
+              <p class="font-semibold text-emerald-600">${{ property.price|floatformat:0 }}</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap justify-center gap-3">
+            <a href="/admin/aurox/properties/{{ property.id }}/change/" class="px-4 py-2 rounded-md bg-amber-100 text-amber-800 hover:bg-amber-200 transition">
+              Edit
+            </a>
+            <a href="{% url 'propertydetail' property.id %}" class="px-4 py-2 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
+              View
+            </a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+      {% if not properties %}
+      <div class="mt-8 rounded-lg border border-dashed border-gray-300 bg-white p-8 text-center text-gray-600">
+        No properties matched your search/filter. Try adjusting your criteria.
+      </div>
+      {% endif %}
+
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-950 text-gray-300 border-t border-gray-800">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+      <div class="grid gap-8 md:grid-cols-4 mb-8">
+        <div>
+          <h3 class="font-semibold text-white mb-3">AUROX</h3>
+          <p class="text-sm text-gray-400">Premium real estate across multiple property types and categories.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3">Property Types</h4>
+          <ul class="text-sm text-gray-400 space-y-1">
+            <li><a href="{% url 'properties' %}?type=house" class="hover:text-amber-400 transition">Houses</a></li>
+            <li><a href="{% url 'properties' %}?type=apartment" class="hover:text-amber-400 transition">Apartments</a></li>
+            <li><a href="{% url 'properties' %}?type=villa" class="hover:text-amber-400 transition">Villas</a></li>
+            <li><a href="{% url 'properties' %}?type=condo" class="hover:text-amber-400 transition">Condos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3">Resources</h4>
+          <ul class="text-sm text-gray-400 space-y-1">
+            <li><a href="{% url 'index' %}" class="hover:text-amber-400 transition">Home</a></li>
+            <li><a href="{% url 'dashboard' %}" class="hover:text-amber-400 transition">Dashboard</a></li>
+            <li><a href="{% url 'properties' %}" class="hover:text-amber-400 transition">All Properties</a></li>
+            <li><a href="{% url 'bookmarks' %}" class="hover:text-blue-400 transition">Bookmarks</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3">Follow Us</h4>
+          <div class="flex gap-3 text-sm">
+            <a href="#github" title="GitHub" class="text-gray-400 hover:text-blue-400 transition">GitHub</a>
+            <a href="#tiktok" title="TikTok" class="text-gray-400 hover:text-blue-400 transition">TikTok</a>
+            <a href="#linkedin" title="LinkedIn" class="text-gray-400 hover:text-blue-400 transition">LinkedIn</a>
+            <a href="#facebook" title="Facebook" class="text-gray-400 hover:text-blue-400 transition">Facebook</a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-6 text-sm text-gray-400 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+        <p>&copy; 2026 AUROX. All rights reserved.</p>
+        <p>Premium real estate management and discovery.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

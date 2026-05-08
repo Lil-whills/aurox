@@ -11,7 +11,7 @@ DEFAULT_VIRTUAL_TOUR_URL = "https://realsee.ai/nMnngDR5"
 
 
 def _clean_param(request, *keys):
-    """Return the first non-empty query parameter from the provided keys."""
+    """Return the first       n-empty query parameter from the provided keys."""
     for key in keys:
         value = request.GET.get(key, "")
         if value is not None:
@@ -113,18 +113,22 @@ def _get_saved_property_ids(user):
 
 # Create your views here.
 def index(request):
-    base_queryset = Properties.objects.filter(is_featured=True)
-    featured_queryset, filters = _apply_property_filters(request, base_queryset)
+    featured_queryset = Properties.objects.filter(is_featured=True).order_by('-created_at')
     saved_property_ids = _get_saved_property_ids(request.user)
     total_featured_count = featured_queryset.count()
-    featured_properties = featured_queryset[:6]
+    featured_properties = list(featured_queryset[:8])
     content = {
         'featured_properties': featured_properties,
-        'filters': filters,
+        'featured_marquee_properties': featured_properties + featured_properties,
         'result_count': total_featured_count,
         'is_limited': total_featured_count > 6,
         'default_virtual_tour_url': DEFAULT_VIRTUAL_TOUR_URL,
         'saved_property_ids': saved_property_ids,
+        'featured_trust_stats': [
+            {'value': '24/7', 'label': 'always available discovery'},
+            {'value': '100%', 'label': 'in-house property presentation'},
+            {'value': '1 scan', 'label': 'complete virtual walkthrough'}
+        ],
     }
     return render(request, 'index.html', content)
 
@@ -138,7 +142,7 @@ def services(request):
     return render(request, 'services.html')
 
 
-@login_required
+@login_required(login_url='login')
 def save_bookmark(request, property_id):
     property_obj = get_object_or_404(Properties, id=property_id)
     bookmark, created = SavedProperty.objects.get_or_create(
@@ -155,7 +159,7 @@ def save_bookmark(request, property_id):
     return redirect('bookmarks')
 
 
-@login_required
+@login_required(login_url='login')
 def bookmarks(request):
     saved_bookmarks = (
         SavedProperty.objects.filter(user=request.user, is_paid=False)
@@ -267,3 +271,33 @@ def propertydetail(request, property_id):
         'saved_property_ids': _get_saved_property_ids(request.user),
     }
     return render(request, 'propertydetail.html', content)
+
+def dashboard(request):
+    # Only allow admin/staff users to access the dashboard
+    if not (request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser)):
+        messages.error(request, "Access denied. Admins only.")
+        return redirect("index")
+
+    # Admins see all properties
+    base_queryset = Properties.objects.all()
+
+    # Apply filters
+    all_properties, filters = _apply_property_filters(request, base_queryset)
+
+    # Calculate summary statistics
+    total_properties = Properties.objects.count()
+    featured_properties = Properties.objects.filter(is_featured=True).count()
+    available_properties = Properties.objects.filter(status='available').count()
+    sold_properties = Properties.objects.filter(status='sold').count()
+
+    content = {
+        'properties': all_properties,
+        'filters': filters,
+        'result_count': all_properties.count(),
+        'total_properties': total_properties,
+        'featured_count': featured_properties,
+        'available_count': available_properties,
+        'sold_count': sold_properties,
+        'is_admin': True,
+    }
+    return render(request, 'dashboard.html', content)
