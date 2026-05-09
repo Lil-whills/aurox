@@ -16,7 +16,7 @@
     <section class="max-w-7xl mx-auto">
 
       <!-- Page heading -->
-      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8 text-center">
+      <div class=" mt-20 flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8 text-center">
         <div class="w-full">
           <p class="text-sm font-semibold uppercase tracking-wider text-blue-600 mb-2">
             Property Management
@@ -155,9 +155,9 @@
 
               {% for property in properties %}
               <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 font-medium text-center">{{ property.name }}</td>
-                <td class="px-6 py-4 text-center">{{ property.type|title }}</td>
-                <td class="px-6 py-4 text-center">{{ property.location }}</td>
+                <td class="px-6 py-4 font-medium text-center text-gray-900">{{ property.name|default:'(no name)' }}</td>
+                <td class="px-6 py-4 text-center text-gray-900">{{ property.get_type_display|default:property.type|title }}</td>
+                <td class="px-6 py-4 text-center text-gray-900">{{ property.location|default:'(no location)' }}</td>
                 <td class="px-6 py-4 text-center">
                   <span class="font-semibold text-emerald-600">${{ property.price|floatformat:0 }}</span>
                   {% if property.old_price %}
@@ -221,7 +221,7 @@
         {% for property in properties %}
         <article class="bg-white border rounded-xl shadow-sm p-5 text-center">
           <div class="flex flex-col items-center gap-2 mb-4">
-            <h2 class="text-lg font-semibold">{{ property.name }}</h2>
+            <h2 class="text-lg font-semibold">{{ property.name|default:'(no name)' }}</h2>
             <div class="flex gap-2 flex-wrap justify-center">
               {% if property.is_featured %}
                 <span class="text-xs font-semibold bg-yellow-100 text-yellow-800 px-2 py-1 rounded whitespace-nowrap">
@@ -243,7 +243,7 @@
           <div class="grid grid-cols-2 gap-2 text-sm mb-5">
             <div class="rounded-lg border border-gray-200 bg-gray-50 p-2">
               <p class="text-[11px] uppercase tracking-wide text-gray-500">Type</p>
-              <p class="font-semibold text-gray-800">{{ property.type|title }}</p>
+              <p class="font-semibold text-gray-800">{{ property.get_type_display|default:property.type|title }}</p>
             </div>
             <div class="rounded-lg border border-gray-200 bg-gray-50 p-2">
               <p class="text-[11px] uppercase tracking-wide text-gray-500">Status</p>
@@ -253,7 +253,7 @@
             </div>
             <div class="rounded-lg border border-gray-200 bg-gray-50 p-2">
               <p class="text-[11px] uppercase tracking-wide text-gray-500">Location</p>
-              <p class="font-semibold text-gray-800">{{ property.location }}</p>
+              <p class="font-semibold text-gray-800">{{ property.location|default:'(no location)' }}</p>
             </div>
             <div class="rounded-lg border border-gray-200 bg-gray-50 p-2">
               <p class="text-[11px] uppercase tracking-wide text-gray-500">Price</p>
