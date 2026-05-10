@@ -119,7 +119,7 @@ def index(request):
     featured_properties = list(featured_queryset[:8])
     content = {
         'featured_properties': featured_properties,
-        'featured_marquee_properties': featured_properties + featured_properties,
+        'featured_marquee_properties': featured_properties,
         'result_count': total_featured_count,
         'is_limited': total_featured_count > 6,
         'default_virtual_tour_url': DEFAULT_VIRTUAL_TOUR_URL,
