@@ -14,19 +14,25 @@
       <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start">
         <div class="images">
           <div class="main-image rounded-2xl overflow-hidden border border-white/10 shadow-xl">
-            {% if property.image1 %}
+            {% if property.image1_remote_url %}
+            <img id="main-property-image" src="{{ property.image1_remote_url }}" alt="{{ property.name }}" class="w-full h-[260px] sm:h-[360px] lg:h-[440px] object-cover">
+            {% elif property.image1 %}
             <img id="main-property-image" src="{{ property.image1.url }}" alt="{{ property.name }}" class="w-full h-[260px] sm:h-[360px] lg:h-[440px] object-cover">
             {% else %}
             <img id="main-property-image" src="{% static 'images/house10.jpg' %}" alt="No image available" class="w-full h-[260px] sm:h-[360px] lg:h-[440px] object-cover">
             {% endif %}
           </div>
           <div class="second-and-third-images grid grid-cols-2 gap-3 mt-3">
-            {% if property.image2 %}
+            {% if property.image2_remote_url %}
+            <img src="{{ property.image2_remote_url }}" alt="{{ property.name }} second image" data-full-src="{{ property.image2_remote_url }}" class="property-thumb w-full h-28 sm:h-36 object-cover rounded-xl border border-white/10 cursor-pointer hover:opacity-90 transition">
+            {% elif property.image2 %}
             <img src="{{ property.image2.url }}" alt="{{ property.name }} second image" data-full-src="{{ property.image2.url }}" class="property-thumb w-full h-28 sm:h-36 object-cover rounded-xl border border-white/10 cursor-pointer hover:opacity-90 transition">
             {% else %}
             <img src="{% static 'images/house2.jpg' %}" alt="Property Side View" data-full-src="{% static 'images/house2.jpg' %}" class="property-thumb w-full h-28 sm:h-36 object-cover rounded-xl border border-white/10 cursor-pointer hover:opacity-90 transition">
             {% endif %}
-            {% if property.image3 %}
+            {% if property.image3_remote_url %}
+            <img src="{{ property.image3_remote_url }}" alt="{{ property.name }} third image" data-full-src="{{ property.image3_remote_url }}" class="property-thumb w-full h-28 sm:h-36 object-cover rounded-xl border border-white/10 cursor-pointer hover:opacity-90 transition">
+            {% elif property.image3 %}
             <img src="{{ property.image3.url }}" alt="{{ property.name }} third image" data-full-src="{{ property.image3.url }}" class="property-thumb w-full h-28 sm:h-36 object-cover rounded-xl border border-white/10 cursor-pointer hover:opacity-90 transition">
             {% else %}
             <img src="{% static 'images/house7.jpg' %}" alt="Property Interior View" data-full-src="{% static 'images/house7.jpg' %}" class="property-thumb w-full h-28 sm:h-36 object-cover rounded-xl border border-white/10 cursor-pointer hover:opacity-90 transition">

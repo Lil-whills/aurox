@@ -122,7 +122,9 @@
           {% if property.is_featured %}
           <span class="absolute top-3 left-3 z-10 bg-amber-500 text-black text-[11px] font-extrabold uppercase tracking-wide px-2.5 py-1 rounded-full">Premium</span>
           {% endif %}
-          {% if property.image1 %}
+          {% if property.image1_remote_url %}
+          <img src="{{ property.image1_remote_url }}" alt="{{ property.name }}" class="w-full h-48 object-cover">
+          {% elif property.image1 %}
           <img src="{{ property.image1.url }}" alt="{{ property.name }}" class="w-full h-48 object-cover">
           {% else %}
           <img src="{% static 'images/house10.jpg' %}" alt="No image available" class="w-full h-48 object-cover">

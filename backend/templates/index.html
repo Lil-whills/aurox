@@ -182,7 +182,9 @@
           {% for property in featured_marquee_properties %}
           <article class="w-[280px] flex-shrink-0 overflow-hidden rounded-2xl border border-amber-500/20 bg-gray-950 shadow-xl shadow-black/20">
             <div class="relative h-44">
-              {% if property.image1 %}
+              {% if property.image1_remote_url %}
+              <img src="{{ property.image1_remote_url }}" alt="{{ property.name }}" class="h-full w-full object-cover">
+              {% elif property.image1 %}
               <img src="{{ property.image1.url }}" alt="{{ property.name }}" class="h-full w-full object-cover">
               {% else %}
               <img src="{% static 'images/house10.jpg' %}" alt="{{ property.name }}" class="h-full w-full object-cover">
