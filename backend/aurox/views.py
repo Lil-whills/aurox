@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import Properties, SavedProperty, ContactMessage
 from django.utils import timezone
+import traceback
 from django.core.mail import send_mail
 from django.conf import settings
 import logging
@@ -179,7 +180,7 @@ Message:
                 subject,
                 full_message,
                 settings.DEFAULT_FROM_EMAIL,
-                ['info@havemont.com'],
+                ['ameyaww2209@gmail.com'],
                 fail_silently=False,
                 headers=headers,
             )
@@ -190,14 +191,16 @@ Message:
             return redirect('contact')
         except Exception as e:
             logger.exception('Failed to send contact email')
+            tb = traceback.format_exc()
             # Surface the SMTP error to staff users or when DEBUG is enabled to aid debugging
             if getattr(settings, 'DEBUG', False) or (hasattr(request, 'user') and request.user.is_staff):
+                # show a short message but keep full traceback in the DB
                 messages.error(request, f'Failed to send message: {e}')
             else:
                 messages.error(request, 'Failed to send message. Please try again later or contact info@havemont.com directly.')
-            # record the error on the contact record
+            # record the full traceback on the contact record (truncate if very large)
             try:
-                contact_record.error = str(e)
+                contact_record.error = tb[:4000]
                 contact_record.save(update_fields=['error'])
             except Exception:
                 logger.exception('Failed to save contact_record error')
