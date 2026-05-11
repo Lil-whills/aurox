@@ -175,14 +175,13 @@ Message:
 
         try:
             # Use the configured DEFAULT_FROM_EMAIL as the sender and add Reply-To header
-            headers = {'Reply-To': email} if email else None
+
             send_mail(
                 subject,
                 full_message,
                 settings.DEFAULT_FROM_EMAIL,
                 ['ameyaww2209@gmail.com'],
                 fail_silently=False,
-                headers=headers,
             )
             contact_record.sent = True
             contact_record.sent_at = timezone.now()
