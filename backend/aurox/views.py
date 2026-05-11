@@ -191,20 +191,24 @@ Message:
             return redirect('contact')
         except Exception as e:
             logger.exception('Failed to send contact email')
+
             tb = traceback.format_exc()
-            # Surface the SMTP error to staff users or when DEBUG is enabled to aid debugging
-            if getattr(settings, 'DEBUG', False) or (hasattr(request, 'user') and request.user.is_staff):
-                # show a short message but keep full traceback in the DB
-                messages.error(request, f'Failed to send message: {e}')
-            else:
-                messages.error(request, 'Failed to send message. Please try again later or contact info@havemont.com directly.')
-            # record the full traceback on the contact record (truncate if very large)
+
+            messages.error(request, f"SMTP ERROR: {e}")
+
             try:
-                contact_record.error = tb[:4000]
+                contact_record.error = str(e) + "\n\n" + tb
                 contact_record.save(update_fields=['error'])
             except Exception:
                 logger.exception('Failed to save contact_record error')
-            context.update({'name': name, 'phone': phone, 'email': email, 'subject': subject, 'message': message})
+
+            context.update({
+                'name': name,
+                'phone': phone,
+                'email': email,
+                'subject': subject,
+                'message': message
+            })
 
     return render(request, 'contact.html', context)
 
