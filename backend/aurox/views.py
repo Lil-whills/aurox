@@ -5,9 +5,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import Properties, SavedProperty
+from django.core.mail import send_mail
+from django.conf import settings
+import logging
 
 
 DEFAULT_VIRTUAL_TOUR_URL = "https://realsee.ai/nMnngDR5"
+
+logger = logging.getLogger(__name__)
 
 
 def _clean_param(request, *keys):
@@ -136,7 +141,46 @@ def about(request):
     return render(request, 'about.html')
 
 def contact(request):
-    return render(request, 'contact.html')
+    context = {}
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        email = request.POST.get('email', '').strip()
+        subject = request.POST.get('subject', '').strip() or 'Contact Form'
+        message = request.POST.get('message', '').strip()
+
+        full_message = f"""
+Name: {name}
+
+Phone: {phone}
+
+Email: {email}
+
+Subject: {subject}
+
+Message:
+{message}
+"""
+
+        try:
+            # Use the configured DEFAULT_FROM_EMAIL as the sender and add Reply-To header
+            headers = {'Reply-To': email} if email else None
+            send_mail(
+                subject,
+                full_message,
+                settings.DEFAULT_FROM_EMAIL,
+                ['info@havemont.com'],
+                fail_silently=False,
+                headers=headers,
+            )
+            messages.success(request, 'Message sent successfully. We will get back to you soon.')
+            return redirect('contact')
+        except Exception:
+            logger.exception('Failed to send contact email')
+            messages.error(request, 'Failed to send message. Please try again later or contact info@havemont.com directly.')
+            context.update({'name': name, 'phone': phone, 'email': email, 'subject': subject, 'message': message})
+
+    return render(request, 'contact.html', context)
 
 def services(request):
     return render(request, 'services.html')

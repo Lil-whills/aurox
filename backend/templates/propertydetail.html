@@ -70,13 +70,19 @@
           <p class="mt-5 text-gray-300 leading-7 text-center">{{ property.description }}</p>
 
           <div class="mt-6 grid grid-cols-1 sm:grid-cols-4 gap-3">
-            <a href="{% url 'contact' %}" class="text-center bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2">
+            <a href="tel:+233557011094" class="text-center bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2">
               <i data-lucide="phone" class="w-4 h-4"></i>
-              <span>Contact Agent</span>
+              <span>Call Agent</span>
             </a>
             <a href="{{ property.virtual_tour_url|default:default_virtual_tour_url }}" target="_blank" rel="noopener noreferrer" class="text-center bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2">
               <i data-lucide="video" class="w-4 h-4"></i>
               <span>Virtual Tour</span>
+            </a>
+            <a href="https://wa.me/233557011094">
+              <button class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2">
+                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                <span>WhatsApp</span>
+              </button>
             </a>
             <button class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2">
               <i data-lucide="message-circle" class="w-4 h-4"></i>

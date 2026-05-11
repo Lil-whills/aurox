@@ -86,6 +86,16 @@
       </div>
     </nav>
   </header>
+  {% if messages %}
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+    {% for message in messages %}
+      <div class="mb-4 rounded-lg px-4 py-3 text-sm text-white"
+           style="background-color: {% if 'success' in message.tags %}#16a34a{% elif 'error' in message.tags %}#dc2626{% else %}#2563eb{% endif %};">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
 
   <main class="{% block main_class %}{% endblock %}">
     {% block content %}{% endblock %}
