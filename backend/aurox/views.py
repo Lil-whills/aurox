@@ -175,9 +175,13 @@ Message:
             )
             messages.success(request, 'Message sent successfully. We will get back to you soon.')
             return redirect('contact')
-        except Exception:
+        except Exception as e:
             logger.exception('Failed to send contact email')
-            messages.error(request, 'Failed to send message. Please try again later or contact info@havemont.com directly.')
+            # Surface the SMTP error to staff users or when DEBUG is enabled to aid debugging
+            if getattr(settings, 'DEBUG', False) or (hasattr(request, 'user') and request.user.is_staff):
+                messages.error(request, f'Failed to send message: {e}')
+            else:
+                messages.error(request, 'Failed to send message. Please try again later or contact info@havemont.com directly.')
             context.update({'name': name, 'phone': phone, 'email': email, 'subject': subject, 'message': message})
 
     return render(request, 'contact.html', context)
