@@ -201,5 +201,5 @@ EMAIL_HOST_USER = _decouple('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = _decouple('EMAIL_HOST_PASSWORD', default='')
 
 # Default from/server email (fall back to the configured host user)
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER or 'ameyaww2209@gmail.com'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER or 'info@havemont.com'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL

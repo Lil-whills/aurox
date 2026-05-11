@@ -6,7 +6,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import Properties, SavedProperty, ContactMessage
 from django.utils import timezone
-from django.core.mail import EmailMessage
 import traceback
 from django.core.mail import send_mail
 from django.conf import settings
@@ -175,16 +174,16 @@ Message:
         )
 
         try:
-            # Use EmailMessage so we can include headers like Reply-To
+            # Use the configured DEFAULT_FROM_EMAIL as the sender and add Reply-To header
             headers = {'Reply-To': email} if email else None
-            msg = EmailMessage(
-                subject=subject,
-                body=full_message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to=['ameyaww2209@gmail.com'],
+            send_mail(
+                subject,
+                full_message,
+                settings.DEFAULT_FROM_EMAIL,
+                ['ameyaww2209@gmail.com'],
+                fail_silently=False,
                 headers=headers,
             )
-            msg.send(fail_silently=False)
             contact_record.sent = True
             contact_record.sent_at = timezone.now()
             contact_record.save(update_fields=['sent', 'sent_at'])
