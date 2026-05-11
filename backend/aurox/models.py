@@ -49,3 +49,22 @@ class SavedProperty(models.Model):
 
     def __str__(self):
         return f'{self.user} saved {self.property}'
+
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=200, blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+    email = models.EmailField(blank=True)
+    subject = models.CharField(max_length=200, blank=True)
+    message = models.TextField(blank=True)
+    sent = models.BooleanField(default=False)
+    error = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    sent_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ('-created_at',)
+
+    def __str__(self):
+        status = 'sent' if self.sent else 'pending'
+        return f'{self.email or "(no-email)"} - {self.subject or "(no-subject)"} ({status})'

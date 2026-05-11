@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import Properties, SavedProperty
+from .models import Properties, SavedProperty, ContactMessage
+from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
 import logging
@@ -162,6 +163,15 @@ Message:
 {message}
 """
 
+        # persist message record before sending so we have an audit trail
+        contact_record = ContactMessage.objects.create(
+            name=name,
+            phone=phone,
+            email=email,
+            subject=subject,
+            message=message,
+        )
+
         try:
             # Use the configured DEFAULT_FROM_EMAIL as the sender and add Reply-To header
             headers = {'Reply-To': email} if email else None
@@ -173,6 +183,9 @@ Message:
                 fail_silently=False,
                 headers=headers,
             )
+            contact_record.sent = True
+            contact_record.sent_at = timezone.now()
+            contact_record.save(update_fields=['sent', 'sent_at'])
             messages.success(request, 'Message sent successfully. We will get back to you soon.')
             return redirect('contact')
         except Exception as e:
@@ -182,6 +195,12 @@ Message:
                 messages.error(request, f'Failed to send message: {e}')
             else:
                 messages.error(request, 'Failed to send message. Please try again later or contact info@havemont.com directly.')
+            # record the error on the contact record
+            try:
+                contact_record.error = str(e)
+                contact_record.save(update_fields=['error'])
+            except Exception:
+                logger.exception('Failed to save contact_record error')
             context.update({'name': name, 'phone': phone, 'email': email, 'subject': subject, 'message': message})
 
     return render(request, 'contact.html', context)
