@@ -208,8 +208,6 @@ Message:
                 'subject': subject,
                 'message': message
             })
-    print("EMAIL_HOST_USER:", settings.EMAIL_HOST_USER)
-    print("EMAIL_HOST_PASSWORD:", settings.EMAIL_HOST_PASSWORD)
     return render(request, 'contact.html', context)
 
 def services(request):
