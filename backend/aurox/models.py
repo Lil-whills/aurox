@@ -68,3 +68,14 @@ class ContactMessage(models.Model):
     def __str__(self):
         status = 'sent' if self.sent else 'pending'
         return f'{self.email or "(no-email)"} - {self.subject or "(no-subject)"} ({status})'
+
+
+class Subscriber(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-subscribed_at',)
+
+    def __str__(self):
+        return self.email

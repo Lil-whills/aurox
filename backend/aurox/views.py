@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import Properties, SavedProperty, ContactMessage
+from .models import Properties, SavedProperty, ContactMessage, Subscriber
 from django.utils import timezone
 import traceback
 import logging
@@ -199,6 +199,20 @@ Message:
 
 def services(request):
     return render(request, 'services.html')
+
+
+def subscribe(request):
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        if email:
+            try:
+                Subscriber.objects.get_or_create(email=email)
+                messages.success(request, 'Thanks for subscribing to Havemont updates.')
+            except Exception:
+                logger.exception('Failed to save subscriber')
+                messages.error(request, 'Failed to subscribe. Please try again later.')
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 @login_required(login_url='login')

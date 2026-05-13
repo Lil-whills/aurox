@@ -1,8 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Properties, SavedProperty
-from .models import ContactMessage
+from .models import Properties, SavedProperty, ContactMessage, Subscriber
 
 
 @admin.register(Properties)
@@ -36,3 +35,9 @@ class ContactMessageAdmin(admin.ModelAdmin):
 			return ''
 		return (obj.error[:200] + '...') if len(obj.error) > 200 else obj.error
 	error_snippet.short_description = 'Error (snippet)'
+
+
+@admin.register(Subscriber)
+class SubscriberAdmin(admin.ModelAdmin):
+	list_display = ('email', 'subscribed_at')
+	search_fields = ('email',)
