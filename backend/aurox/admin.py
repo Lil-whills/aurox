@@ -21,9 +21,15 @@ class SavedPropertyAdmin(admin.ModelAdmin):
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
-	list_display = ('email', 'name', 'subject', 'sent', 'created_at', 'error_snippet')
+	list_display = ('name', 'email', 'phone', 'message_snippet', 'sent', 'created_at', 'error_snippet')
 	list_filter = ('sent', 'created_at')
-	search_fields = ('email', 'name', 'subject', 'message', 'error')
+	search_fields = ('email', 'name', 'subject', 'message', 'error', 'phone')
+
+	def message_snippet(self, obj):
+		if not obj.message:
+			return ''
+		return (obj.message[:200] + '...') if len(obj.message) > 200 else obj.message
+	message_snippet.short_description = 'Message (snippet)'
 
 	def error_snippet(self, obj):
 		if not obj.error:
