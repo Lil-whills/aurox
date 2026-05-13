@@ -7,8 +7,6 @@ from django.contrib.auth.models import User
 from .models import Properties, SavedProperty, ContactMessage
 from django.utils import timezone
 import traceback
-from django.core.mail import send_mail
-from django.conf import settings
 import logging
 
 
@@ -164,7 +162,7 @@ Message:
 {message}
 """
 
-        # persist message record before sending so we have an audit trail
+        # persist message record (no SMTP or external email services on free plan)
         contact_record = ContactMessage.objects.create(
             name=name,
             phone=phone,
@@ -174,27 +172,16 @@ Message:
         )
 
         try:
-            # Use the configured DEFAULT_FROM_EMAIL as the sender and add Reply-To header
-
-            send_mail(
-                subject,
-                full_message,
-                settings.DEFAULT_FROM_EMAIL,
-                ['ameyaww2209@gmail.com'],
-                fail_silently=False,
-            )
+            logger.info("Contact inquiry saved: %s <%s> %s", name, email, phone)
             contact_record.sent = True
             contact_record.sent_at = timezone.now()
             contact_record.save(update_fields=['sent', 'sent_at'])
-            messages.success(request, 'Message sent successfully. We will get back to you soon.')
+            messages.success(request, 'Thank you. Our team will contact you shortly.')
             return redirect('contact')
         except Exception as e:
-            logger.exception('Failed to send contact email')
-
+            logger.exception('Failed to update contact_record status')
             tb = traceback.format_exc()
-
-            messages.error(request, f"SMTP ERROR: {e}")
-
+            messages.error(request, 'Failed to save your message. Please try again later.')
             try:
                 contact_record.error = str(e) + "\n\n" + tb
                 contact_record.save(update_fields=['error'])
