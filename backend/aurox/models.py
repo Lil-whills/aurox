@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 class Properties(models.Model):
@@ -9,9 +10,9 @@ class Properties(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2) 
     old_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     description = models.TextField()
-    image1 = models.ImageField(upload_to='property_images/')
-    image2 = models.ImageField(upload_to='property_images/', null=True, blank=True)
-    image3 = models.ImageField(upload_to='property_images/', null=True, blank=True)
+    image1 = CloudinaryField('image1')
+    image2 = CloudinaryField('image2', blank=True, null=True)
+    image3 = CloudinaryField('image3', blank=True, null=True)
     image1_remote_url = models.URLField(max_length=500, null=True, blank=True)
     image2_remote_url = models.URLField(max_length=500, null=True, blank=True)
     image3_remote_url = models.URLField(max_length=500, null=True, blank=True)
