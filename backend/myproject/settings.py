@@ -32,12 +32,24 @@ _decouple = AutoConfig(search_path=BASE_DIR)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-key-change-this')
-DEBUG = config('DEBUG', default=True, cast=bool)
 
-_allowed_hosts = [host.strip() for host in config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',') if host.strip()]
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+# Allowed hosts
+_allowed_hosts = [
+    host.strip()
+    for host in config(
+        'ALLOWED_HOSTS',
+        default='localhost,127.0.0.1,havemont.onrender.com,havemont.com,www.havemont.com'
+    ).split(',')
+    if host.strip()
+]
+
 _render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME', '').strip()
+
 if _render_hostname and _render_hostname not in _allowed_hosts:
     _allowed_hosts.append(_render_hostname)
+
 ALLOWED_HOSTS = _allowed_hosts
 
 
@@ -124,13 +136,19 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+# CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
-    for origin in config('CSRF_TRUSTED_ORIGINS', default='').split(',')
+    for origin in config(
+        'CSRF_TRUSTED_ORIGINS',
+        default='https://havemont.com,https://www.havemont.com,https://havemont.onrender.com'
+    ).split(',')
     if origin.strip()
 ]
+
 if _render_hostname:
     render_origin = f'https://{_render_hostname}'
+
     if render_origin not in CSRF_TRUSTED_ORIGINS:
         CSRF_TRUSTED_ORIGINS.append(render_origin)
 
