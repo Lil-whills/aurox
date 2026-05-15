@@ -84,10 +84,6 @@
                 <span>WhatsApp</span>
               </button>
             </a>
-            <button class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2">
-              <i data-lucide="message-circle" class="w-4 h-4"></i>
-              <span>WhatsApp</span>
-            </button>
             {% if user.is_authenticated %}
               {% if property.id in saved_property_ids %}
               <a href="{% url 'bookmarks' %}" class="text-center bg-emerald-500/90 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2">

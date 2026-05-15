@@ -233,6 +233,22 @@ def save_bookmark(request, property_id):
 
 
 @login_required(login_url='login')
+def delete_bookmark(request, property_id):
+    if request.method == 'POST':
+        try:
+            bookmark = SavedProperty.objects.filter(user=request.user, property_id=property_id).first()
+            if bookmark:
+                bookmark.delete()
+                messages.success(request, 'Saved property removed.')
+            else:
+                messages.error(request, 'Bookmark not found.')
+        except Exception:
+            logger.exception('Failed to delete saved bookmark')
+            messages.error(request, 'Failed to remove saved property.')
+    return redirect('bookmarks')
+
+
+@login_required(login_url='login')
 def bookmarks(request):
     saved_bookmarks = (
         SavedProperty.objects.filter(user=request.user, is_paid=False)

@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('bookmarks/', views.bookmarks, name='bookmarks'),
     path('bookmarks/save/<int:property_id>/', views.save_bookmark, name='save_bookmark'),
+    path('bookmarks/delete/<int:property_id>/', views.delete_bookmark, name='delete_bookmark'),
     path('logout/', views.logout_view, name='logout'),
     path('login/', views.login_view, name='login'),
     path('signup/', views.signup_view, name='signup'),
