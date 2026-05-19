@@ -57,7 +57,7 @@
                 <span class="text-amber-300 font-semibold text-lg">{{ property.price }} GHS</span>
                 <span class="text-xs text-gray-400">Saved {{ bookmark.saved_at|date:"M d, Y" }}</span>
               </div>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <a href="{{ property.virtual_tour_url|default:default_virtual_tour_url }}" target="_blank" rel="noopener noreferrer" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg transition text-center flex items-center justify-center gap-2">
                   <i data-lucide="video" class="w-4 h-4"></i>
                   <span>Virtual Tour</span>
