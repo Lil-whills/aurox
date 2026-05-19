@@ -30,11 +30,17 @@
           <article class="relative bg-gradient-to-b from-gray-900 to-gray-800 rounded-2xl overflow-hidden border border-amber-400/40 shadow-xl hover:-translate-y-1 transition duration-300">
             <span class="absolute top-3 left-3 z-10 bg-amber-500 text-black text-[11px] font-extrabold uppercase tracking-wide px-2.5 py-1 rounded-full">Saved</span>
             {% if property.image1 %}
-              <img src="{{ property.image1_remote_url }}" alt="{{ property.name }}" class="w-full h-48 object-cover">
+              <a href="{% url 'propertydetail' property.id %}">
+                <img src="{{ property.image1_remote_url }}" alt="{{ property.name }}" class="w-full h-48 object-cover">
+              </a>
               {% elif property.image1 %}
-              <img src="{{ property.image1.url }}" alt="{{ property.name }}" class="w-full h-48 object-cover">
+              <a href="{% url 'propertydetail' property.id %}">
+                <img src="{{ property.image1.url }}" alt="{{ property.name }}" class="w-full h-48 object-cover">
+              </a>
               {% else %}
-              <img src="{% static 'images/house10.jpg' %}" alt="No image available" class="w-full h-48 object-cover">
+              <a href="{% url 'propertydetail' property.id %}">
+                <img src="{% static 'images/house10.jpg' %}" alt="No image available" class="w-full h-48 object-cover">
+              </a>
               {% endif %}
             <div class="p-4">
               <div class="flex flex-wrap items-center gap-2">
@@ -52,15 +58,11 @@
                 <span class="text-xs text-gray-400">Saved {{ bookmark.saved_at|date:"M d, Y" }}</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <a href="{% url 'propertydetail' property.id %}" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg transition text-center flex items-center justify-center gap-2">
-                  <i data-lucide="eye" class="w-4 h-4"></i>
-                  <span>View Details</span>
-                </a>
-                <a href="{{ property.virtual_tour_url|default:default_virtual_tour_url }}" target="_blank" rel="noopener noreferrer" class="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold py-2 px-4 rounded-lg transition text-center flex items-center justify-center gap-2">
+                <a href="{{ property.virtual_tour_url|default:default_virtual_tour_url }}" target="_blank" rel="noopener noreferrer" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg transition text-center flex items-center justify-center gap-2">
                   <i data-lucide="video" class="w-4 h-4"></i>
                   <span>Virtual Tour</span>
                 </a>
-                <form method="post" action="{% url 'delete_bookmark' property.id %}" class="w-full">
+                <form method="post" action="{% url 'delete_bookmark' property.id %}" class="w-full sm:col-span-2">
                   {% csrf_token %}
                   <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition">
                     <span>Remove</span>
